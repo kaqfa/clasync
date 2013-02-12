@@ -1,0 +1,73 @@
+<!-- client request a sync to server -->
+<syncml>
+    <SyncHdr>
+        <SessionID>1</SessionID>
+        <MsgID>1</MsgID>
+        <Target>
+            <LocURI>http://sync.claroline.com</LocURI>
+        </Target>
+        <Source>
+            <LocURI>{"uuid":"ASDF09A8FA987FA098A","platform":"Android","model":"Galaxy Tab P6200",
+                 "os_version":"4.1.2","utc_time":"UTC+7"}</LocURI>
+        </Source>
+        <Cred>
+           {"username":"kaqfa","password":"123"}
+        </Cred>		
+    </SyncHdr>
+    <SyncBody>
+        <CmdID>2</CmdID> <!-- 1 = INIT; 2 = SYNC -->
+        <Mode>200</Mode> <!-- 200 = TWO_WAY_ALERT -->            
+        <Anchor>
+            <Last>234</Last>
+            <Next>276</Next>
+        </Anchor>            
+        <Data> <!-- JSON messages -->
+            {
+                "insert": [
+                    {
+                        "name": "c_EN_course_description",
+                        "cols": [
+                            "id",
+                            "category",
+                            "title",
+                            "content",
+                            "lastEditDate",
+                            "visibility"
+                        ],
+                        "vals": [
+                            "13",
+                            "9",
+                            "adlifjhdklgjhdkl",
+                            "alskdjfhwioe rhwcdjhfslakdjfhsd ",
+                            "2013-01-06 08:22:28",
+                            "VISIBLE"
+                        ]
+                    }
+                ],
+                "update": [
+                    {"name": "c_EN_course_description",
+                        "cols": [
+                            "id",
+                            "category",
+                            "title",
+                            "content",
+                            "lastEditDate",
+                            "visibility"
+                        ],
+                        "vals": [
+                            "13",
+                            "9",
+                            "adlifjhdklgjhdkl",
+                            "alskdjfhwioe rhwcdjhfslakdjfhsd ",
+                            "2013-01-06 08:22:28",
+                            "VISIBLE"
+                        ]}
+                ],
+                "delete": [{"name": "c_EN_course_description",
+                            "cols": ["id"],
+                            "vals": ["13"]}
+                          ]
+            }
+        </Data>
+    </SyncBody>
+</syncml>
