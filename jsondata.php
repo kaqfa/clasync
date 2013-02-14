@@ -112,8 +112,9 @@ class JSONData{
         $arrJson['insert'][] = array('name'=>$this->data['table_name'],
             'cols'=> $changed->cols, 'vals' => $changed->vals);
       } else if($this->data['action'] == 'U'){
-        $arrJson['update'][] = array('name'=>$this->data['table_name'],
-            'cond' => $this->data['table_id'].'='.$this->data['row_id'],
+          $changed = json_decode(str_replace($this->cr,"",$this->data['changed_val']));
+          $arrJson['update'][] = array('name'=>$this->data['table_name'],
+            'cond' => $this->data['table_id'].'="'.$this->data['row_id'].'"',
             'cols' => $changed->cols, 'vals' => $changed->vals);
       } else { // $data['action'] == 'D'
         $arrJson['delete'][] = array('name'=>$this->data['table_name'],
