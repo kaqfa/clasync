@@ -32,20 +32,20 @@ class SyncML {
                    }
                 }
            } else {
-               echo "Target is not valid";
+               $this->sendReply(3);
                exit();
            }
         } else {
-            echo "user doesn't exist";
+            $this->sendReply(2);
             exit();
         }        
         $this->sendReply();
     }
     
-    function sendReply(){
+    function sendReply($type){ // 1 = success; 2 = invaliduser; 3 = invalidlocation
         $xmlReply = simplexml_load_string('<SyncML></SyncML>');
         
-        $domHeader  = dom_import_simplexml($this->header->generateHeader());
+        $domHeader  = dom_import_simplexml($this->header->generateHeader($type));
         $domBody    = dom_import_simplexml($this->body->generateInit());
         $domReply   = dom_import_simplexml($xmlReply);
         
@@ -61,10 +61,12 @@ class SyncML {
 
     function getMessage($data,$from = 'url') {
         try{
-            if($from === 'url'){
+            if($from === 'url'){                                
                 $this->xml = simplexml_load_file($data);
+                print_r($this->xml) ;
             } else if($from === 'string'){
                 $this->xml = simplexml_load_string($data);
+                
             }
         } catch (Exception $e){
             echo 'don\'t worry: '.$e;

@@ -61,8 +61,9 @@ class Body{
   function generateInit(){
       $this->xml->addChild($this->element['cmdid'], $this->cmd);
       $this->xml->addChild($this->element['mode'], $this->mode);
-      $this->xml->addChild($this->element['anchor'], '<Last>234</Last><Next>276</Next>');
-      
+      $anchor = $this->xml->addChild($this->element['anchor']);
+        $anchor->addChild('Last', $this->anchor->Last);
+        $anchor->addChild('Next', $this->anchor->Next);
       return $this->xml;
   }
   

@@ -107,7 +107,7 @@ class Header{
       );
   }
   
-  function generateHeader(){
+  function generateHeader($type = 1){ // 1 = success; 2 = invaliduser; 3 = invalidlocation
       $header = '<?xml version="1.0"?><SyncHdr></SyncHdr>';
       $xml = simplexml_load_string($header);
       
@@ -116,8 +116,17 @@ class Header{
       $target = $xml->addChild($this->element['target']);
         $target->addChild($this->element['location'], json_encode($this->source));
       $source = $xml->addChild($this->element['source']);
+      if($type == 1){
         $source->addChild($this->element['location'], $this->target->LocURI);
-      $xml->addChild($this->element['credential'], json_encode($this->cred));
+      } else if($type == 3){
+        $source->addChild($this->element['location'], 'invalid');
+      }
+      $cred = $xml->addChild($this->element['credential'], json_encode($this->cred));
+//      if($type == 1){
+//        $cred->addChild('uservalid',  'valid');
+//      } else if($type == 2){
+//        $cred->addChild('uservalid',  'invalid');
+//      }
       
       return $xml;
   }

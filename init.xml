@@ -7,19 +7,16 @@
             <LocURI>http://sync.claroline.com</LocURI>
         </Target>
         <Source>
-            <LocURI>
-                {"uuid":"ASDF09A8FA987FA098A","platform":"Android","model":"Galaxy Tab P6200",
-                 "os_version":"4.1.2","utc_time":"UTC+7"}
-            </LocURI>
+            <LocURI>{"uuid":"device.uuid","platform":"device.platform","model":"device.model","os_version":"device.version","utc_time":"UTC+7"}</LocURI>
         </Source>
-        <Cred>{"username":"kaqfa","password":"123"}</Cred>		
+        <Cred>{"username":"elfaatta@gmail.com","password":"firdaus123"}</Cred>
     </SyncHdr>
     <SyncBody>
-        <CmdID>1</CmdID> <!-- 1 = INIT; 2 = SYNC -->
-        <Mode>200</Mode> <!-- 200 = TWO_WAY_ALERT -->
+        <CmdID>3</CmdID>
+        <Mode>200</Mode>
         <Anchor>
-            <Last>234</Last>
-            <Next>276</Next>
+            <Last></Last>
+            <Next>2013/02/21 14:33:18</Next>
         </Anchor>
     </SyncBody>
-</SyncML>
+</SyncML> 
