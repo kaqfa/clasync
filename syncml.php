@@ -42,7 +42,7 @@ class SyncML {
         $this->sendReply();
     }
     
-    function sendReply($type){ // 1 = success; 2 = invaliduser; 3 = invalidlocation
+    function sendReply($type = 1){ // 1 = success; 2 = invaliduser; 3 = invalidlocation
         $xmlReply = simplexml_load_string('<SyncML></SyncML>');
         
         $domHeader  = dom_import_simplexml($this->header->generateHeader($type));
