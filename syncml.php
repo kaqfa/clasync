@@ -1,4 +1,5 @@
 <?php
+
 require('db.php');
 require('header.php');
 require('body.php');
@@ -9,77 +10,78 @@ require('body.php');
 
 class SyncML {
 
-    private $header;
-    private $body;
-    private $xml = null;
+  private $header;
+  private $body;
+  private $xml = null;
 
-    function __construct($data,$from = 'url') {
-        $this->getMessage($data,$from);
-        $this->header = new Header($this->xml->SyncHdr);
-        $this->body = new Body($this->xml->SyncBody);
-    }
-    
-    function doProccess(){
-        if($this->header->validateCred() == true){
-           if($this->header->validateURI() == true) {
-               if($this->body->validateAnchor($this->header->getSource()->deviceId) == false){
-                  $this->body->setMode ('400'); // set to slow synchronization
-               }  else { 
-                   $this->body->setMode('200');                   
-                   if($this->body->getCmd() == '2' && $this->body->getData() != null){ //
-                       //echo 'ini dieksekusi';
-                       echo $this->body->executeChange();
-                   }
-                }
-           } else {
-               $this->sendReply(3);
-               exit();
-           }
-        } else {
-            $this->sendReply(2);
-            exit();
-        }        
-        $this->sendReply();
-    }
-    
-    function sendReply($type = 1){ // 1 = success; 2 = invaliduser; 3 = invalidlocation
-        $xmlReply = simplexml_load_string('<SyncML></SyncML>');
-        
-        $domHeader  = dom_import_simplexml($this->header->generateHeader($type));
-        $domBody    = dom_import_simplexml($this->body->generateInit());
-        $domReply   = dom_import_simplexml($xmlReply);
-        
-        $domHeader  = $domReply->ownerDocument->importNode($domHeader,TRUE);
-        $domBody    = $domReply->ownerDocument->importNode($domBody, TRUE);
-        
-        $domReply->appendChild($domHeader);
-        $domReply->appendChild($domBody);
-        
-        echo $xmlReply->asXML();
-        //print_r($_SESSION);
-    }
+  function __construct($data, $from = 'url') {
+    $this->getMessage($data, $from);
+    $this->header = new Header($this->xml->SyncHdr);
+    $this->body = new Body($this->xml->SyncBody);
+  }
 
-    function getMessage($data,$from = 'url') {
-        try{
-            if($from === 'url'){                                
-                $this->xml = simplexml_load_file($data);
-                print_r($this->xml) ;
-            } else if($from === 'string'){
-                $this->xml = simplexml_load_string($data);
-                
-            }
-        } catch (Exception $e){
-            echo 'don\'t worry: '.$e;
-        }        
+  function doProccess() {
+    if ($this->header->validateCred() == true) {
+      if ($this->header->validateURI() == true) {
+        if ($this->body->getCmd() == 1) {
+          $uuid = $this->header->getSource()->deviceId;
+          if ($this->body->validateAnchor($uuid) == false) {
+            $this->body->setMode('400'); // set to slow synchronization
+          } else {
+            $this->body->setMode('200');
+          }
+        } else if ($this->body->getCmd() == '2' && $this->body->getData() != null) {
+          //echo 'ini dieksekusi';
+          echo $this->body->executeChange();
+          $this->sendReply();
+        }
+      } else {
+        $this->sendReply(3);
+        exit();
+      }
+    } else {
+      $this->sendReply(2);
+      exit();
     }
+  }
 
-    function setHeader($xmlHeader) {
-        $this->header = $xmlHeader;
-    }
+  function sendReply($type = 1) { // 1 = success; 2 = invaliduser; 3 = invalidlocation
+    $xmlReply = simplexml_load_string('<SyncML></SyncML>');
 
-    function setBody($xmlBody) {
-        $this->body = $xmlBody;
+    $domHeader = dom_import_simplexml($this->header->generateHeader($type));
+    $domBody = dom_import_simplexml($this->body->generateInit());
+    $domReply = dom_import_simplexml($xmlReply);
+
+    $domHeader = $domReply->ownerDocument->importNode($domHeader, TRUE);
+    $domBody = $domReply->ownerDocument->importNode($domBody, TRUE);
+
+    $domReply->appendChild($domHeader);
+    $domReply->appendChild($domBody);
+
+    echo $xmlReply->asXML();
+    //print_r($_SESSION);
+  }
+
+  function getMessage($data, $from = 'url') {
+    try {
+      if ($from === 'url') {
+        $this->xml = simplexml_load_file($data);
+        print_r($this->xml);
+      } else if ($from === 'string') {
+        $this->xml = simplexml_load_string($data);
+      }
+    } catch (Exception $e) {
+      echo 'don\'t worry: ' . $e;
     }
-    
+  }
+
+  function setHeader($xmlHeader) {
+    $this->header = $xmlHeader;
+  }
+
+  function setBody($xmlBody) {
+    $this->body = $xmlBody;
+  }
+
 }
 
