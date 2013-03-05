@@ -30,11 +30,10 @@ class SyncML {
           } else {
             $this->body->setMode('200');
           }
-        } else if ($this->body->getCmd() == '2' && $this->body->getData() != null) {
-          //echo 'ini dieksekusi';
-          echo $this->body->executeChange();
-          $this->sendReply();
+        } else if ($this->body->getCmd() == '2' && $this->body->getData() != null) {          
+          $this->body->executeChange();         
         }
+        $this->sendReply();
       } else {
         $this->sendReply(3);
         exit();
@@ -66,8 +65,9 @@ class SyncML {
     try {
       if ($from === 'url') {
         $this->xml = simplexml_load_file($data);
-        print_r($this->xml);
+        //print_r($this->xml);
       } else if ($from === 'string') {
+        //echo $data;
         $this->xml = simplexml_load_string($data);
       }
     } catch (Exception $e) {

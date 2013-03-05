@@ -9,7 +9,7 @@
         <Source>
             <LocURI>{"uuid":"device.uuid","platform":"device.platform","model":"device.model","os_version":"device.version","utc_time":"UTC+7"}</LocURI>
         </Source>
-        <Cred>{"username":"elfaatta@gmail.com","password":"firdaus123"}</Cred>
+        <Cred>{"username":"kaqfa","password":"123"}</Cred>
     </SyncHdr>
     <SyncBody>
         <CmdID>3</CmdID>
