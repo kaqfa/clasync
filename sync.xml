@@ -11,7 +11,7 @@
                  "os_version":"4.1.2","utc_time":"UTC+7"}</LocURI>
         </Source>
         <Cred>
-           {"username":"kaqfa","password":"123"}
+            {"username":"kaqfa","password":"123"}
         </Cred>		
     </SyncHdr>
     <SyncBody>

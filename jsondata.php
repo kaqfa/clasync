@@ -8,7 +8,8 @@
 class JSONData{
   private $res;
   private $data;
-  private $json;
+  public $json;
+  public $jsonData = array('insert' => array(), 'update' => array(), 'delete' => array());
   public $cr = array("\r\n", "\n", "\r");
   
   function __construct($json = null){      
@@ -88,19 +89,18 @@ class JSONData{
       }
   }
   
-  function tableToJson($tableName, $cond = '1'){
-    $arrJson = array('insert' => array(), 'update' => array(), 'delete' => array());
-    $this->res  = mysql_query('SELECT * FROM '.$tableName.' where '.$cond);
+  function tableToJson($tableName, $query){
+    //$this->json = array('insert' => array(), 'update' => array(), 'delete' => array());
+    $this->res  = mysql_query($query) or die(mysql_error());
     while($this->data = mysql_fetch_assoc($this->res)){
       $cols = $vals = array();
       foreach($this->data as $key => $val){
         $cols[] = $key;
         $vals[] = $val;
       }
-      $arrJson['insert'][] = array('name'=>$tableName,
-            'cols'=> $cols, 'vals' => $vals);
+      $this->jsonData['insert'][] = array('name'=>$tableName, 'cols'=> $cols, 'vals' => $vals);
     }
-    return json_encode($arrJson);
+    return json_encode($this->jsonData);
   }
   
   function logsToJson(){

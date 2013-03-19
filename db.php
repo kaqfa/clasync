@@ -1,7 +1,7 @@
 <?php
 $dbhost = "localhost";
 $dbuser = "root";
-$dbpass = "123";
+$dbpass = "";
 $dbname = "claroline";
 
 $dbConn = mysql_connect($dbhost,$dbuser,$dbpass);

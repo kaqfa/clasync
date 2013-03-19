@@ -27,6 +27,7 @@ class SyncML {
           $uuid = $this->header->getSource()->deviceId;
           if ($this->body->validateAnchor($uuid) == false) {
             $this->body->setMode('400'); // set to slow synchronization
+            // delete all map
           } else {
             $this->body->setMode('200');
           }
@@ -48,7 +49,7 @@ class SyncML {
     $xmlReply = simplexml_load_string('<SyncML></SyncML>');
 
     $domHeader = dom_import_simplexml($this->header->generateHeader($type));
-    $domBody = dom_import_simplexml($this->body->generateInit());
+    $domBody = dom_import_simplexml($this->body->generateReply());
     $domReply = dom_import_simplexml($xmlReply);
 
     $domHeader = $domReply->ownerDocument->importNode($domHeader, TRUE);
