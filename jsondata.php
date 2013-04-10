@@ -51,11 +51,12 @@ class JSONData{
       foreach($insData['vals'] as $vals){
         $sql .= '\''.$vals.'\',';
       } $sql = substr($sql,0,-1).'); ';
-      
+      mysql_query($sql) or die(mysql_error());
       // query to insert map 
-      $sql .= ' insert into sync_maps values '.
-              '(null,"'.$_SESSION['uuid'].'","'.$insData['name'].'","'.$oldId.'","'.$insData['vals'][0].'"); 
-               call update_logs("from : '.$_SESSION['uuid'].'"); ';
+      $sql = ' insert into sync_maps values '.
+              '(null,"'.$_SESSION['uuid'].'","'.$insData['name'].'","'.$oldId.'","'.$insData['vals'][0].'");';
+      mysql_query($sql) or die(mysql_error());
+      mysql_query('call update_logs("from : '.$_SESSION['uuid'].'"); ') or die(mysql_error());
     } 
     
     foreach($arrData['update'] as $updData){              
@@ -94,12 +95,14 @@ class JSONData{
     $this->res  = mysql_query($query) or die(mysql_error());
     while($this->data = mysql_fetch_assoc($this->res)){
       $cols = $vals = array();
-      foreach($this->data as $key => $val){
+      //if($tableName == 'c_en_course_description') print_r($this->data);
+      foreach($this->data as $key => $val){        
         $cols[] = $key;
-        $vals[] = $val;
+        $vals[] = preg_replace('/[^(\x20-\x7F)]*/','',$val);
       }
       $this->jsonData['insert'][] = array('name'=>$tableName, 'cols'=> $cols, 'vals' => $vals);
     }
+    //print_r($this->jsonData);
     return json_encode($this->jsonData);
   }
   
@@ -110,12 +113,14 @@ class JSONData{
       if($this->data['action'] == 'I'){
         $changed = json_decode(str_replace($this->cr,"",$this->data['changed_val']));
         $arrJson['insert'][] = array('name'=>$this->data['table_name'],
-            'cols'=> $changed->cols, 'vals' => $changed->vals);
+            'cols'=> $changed->cols, 
+            'vals' => $changed->vals);
       } else if($this->data['action'] == 'U'){
           $changed = json_decode(str_replace($this->cr,"",$this->data['changed_val']));
           $arrJson['update'][] = array('name'=>$this->data['table_name'],
             'cond' => $this->data['table_id'].'="'.$this->data['row_id'].'"',
-            'cols' => $changed->cols, 'vals' => $changed->vals);
+            'cols' => $changed->cols, 
+            'vals' => $changed->vals);
       } else { // $data['action'] == 'D'
         $arrJson['delete'][] = array('name'=>$this->data['table_name'],
             'cond' => $this->data['table_id'].'='.$this->data['row_id']);

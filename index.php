@@ -1,4 +1,4 @@
-<?php
+<?php header('Access-Control-Allow-Origin: *');
 include 'syncml.php';
 
 if(isset($_POST['message'])){

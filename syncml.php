@@ -22,7 +22,7 @@ class SyncML {
 
   function doProccess() {
     if ($this->header->validateCred() == true) {
-      if ($this->header->validateURI() == true) {
+      if ($this->header->validateURI() == true) {        
         if ($this->body->getCmd() == 1) {
           $uuid = $this->header->getSource()->deviceId;
           if ($this->body->validateAnchor($uuid) == false) {
@@ -31,8 +31,8 @@ class SyncML {
           } else {
             $this->body->setMode('200');
           }
-        } else if ($this->body->getCmd() == '2' && $this->body->getData() != null) {          
-          $this->body->executeChange();         
+        } else if ($this->body->getCmd() == '2' && $this->body->getData() != null) {
+          $this->body->executeChange();
         }
         $this->sendReply();
       } else {
